@@ -116,6 +116,9 @@ class VCOM
 		// [gunner, backpackClassname, staticWeapon] call VCM_fnc_PackStatic;
 		class PackStatic {};
 		
+		// player call VCM_fnc_PlayerFire
+		class PlayerFire {};
+
 		// group call VCM_fnc_RearmSelf;
 		class RearmSelf {};
 		
