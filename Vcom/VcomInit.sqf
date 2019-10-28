@@ -54,6 +54,7 @@ VCOM_MINEARRAY = [];
 				if (!isPlayer leader _x && simulationEnabled leader _x) then {
 					if !(_x in VcmAI_ActiveList) then {
 						if !(units _x isEqualTo []) then {
+							_x call VCM_AIDIFSET;
 							_x call VCM_fnc_SquadExc;
 						};
 					};
