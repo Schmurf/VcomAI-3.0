@@ -41,12 +41,6 @@ VCOM_MINEARRAY = [];
 ["VCMMINEMONITOR", "onEachFrame", {[] call VCM_fnc_MineMonitor}] call BIS_fnc_addStackedEventHandler;
 
 [] spawn {
-	if (hasInterface) then {
-		//Event handlers for players
-		player addEventHandler ["Fired",{_this call VCM_fnc_HearingAids;}];
-		player spawn VCM_fnc_IRCHECK;
-		player addEventHandler ["Respawn",{_this spawn VCM_fnc_IRCHECK;}];
-	};
 
 	while {true} do {
 		if (VCM_ActivateAI) then {
@@ -61,6 +55,16 @@ VCOM_MINEARRAY = [];
 				};
 			} foreach allGroups;
 		};
-		sleep 10;
 	};
+};
+sleep 10;
+// TODO handle JIP
+if (isServer) then {
+	{
+		if (hasInterface) then {
+			if !(_x in VCM_PLAYERSLIST) then {
+				_x call VCM_fnc_PlayerFire;
+			};
+		};
+	} forEach allPlayers;
 };
