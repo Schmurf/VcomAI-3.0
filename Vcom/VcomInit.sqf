@@ -57,7 +57,7 @@ VCOM_MINEARRAY = [];
 		};
 	};
 };
-sleep 5;
+waitUntil{time > 1};
 // TODO handle JIP
 //Only server add event handlers.
 if (isServer) then {
@@ -65,7 +65,7 @@ if (isServer) then {
 		if (VCM_Debug) then {systemChat (str _x)};
 
 		if !(_x in VCM_PLAYERSLIST) then {
-			_x call VCM_fnc_PlayerFire;
+			_x spawn VCM_fnc_PlayerFire;
 		};
 	} forEach allPlayers;
 };
