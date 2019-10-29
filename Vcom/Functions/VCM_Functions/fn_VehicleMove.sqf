@@ -31,6 +31,8 @@ if (_Transport) then
 	//Let's find the nearest enemies and friendlies!	
 	private _nearestEnemy = _leader call VCM_fnc_ClstEmy;	
 	private _nearestFriend = _nearestEnemy call VCM_fnc_ClstEmy;
+	if (_nearestFriend isEqualTo [0,0,0]) exitWith {};
+	
 	private _DisembarkLocation1 = getPosWorld _nearestFriend;
 
 	if (_DisembarkLocation1 distance2D _leader > VCM_HEARINGDISTANCE) exitWith {};
