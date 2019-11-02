@@ -1,10 +1,10 @@
-/*%FSM<COMPILE "C:\Program Files (x86)\Steam\steamapps\common\Arma 3 Tools\FSMEditor\scriptedFSM.cfg, SQUADBEH">*/
+/*%FSM<COMPILE "scriptedFSM.cfg, SQUADBEH">*/
 /*%FSM<HEAD>*/
 /*
 item0[] = {"Begin_State",0,250,0.000000,700.000000,100.000000,750.000000,0.000000,"Begin State"};
 item1[] = {"Cond",4,218,-125.000000,700.000000,-25.000000,750.000000,50.000000,"Cond"};
 item2[] = {"Exit_FSM",1,250,-250.000000,700.000000,-175.000000,750.000000,0.000000,"Exit FSM"};
-item3[] = {"Continue",8,218,0.000000,575.000000,100.000000,625.000000,0.000000,"Continue"};
+item3[] = {"Continue",8,4314,0.000000,575.000000,100.000000,625.000000,0.000000,"Continue"};
 item4[] = {"Start_Point",2,250,50.000000,400.000000,150.000000,450.000000,0.000000,"Start Point"};
 item5[] = {"Exit_Cond",4,218,-100.000000,475.000000,0.000000,525.000000,700.000000,"Exit Cond"};
 item6[] = {"Exit_FSM_1",1,250,-250.000000,475.000000,-175.000000,525.000000,0.000000,"Exit FSM"};
@@ -27,7 +27,7 @@ item22[] = {"Combat",4,218,675.000000,225.000000,775.000000,275.000000,100.00000
 item23[] = {"Inf_Combat_Brain",2,250,875.000000,250.000000,975.000000,300.000000,0.000000,"Inf Combat Brain"};
 item24[] = {"Combat_BEGIN",4,218,675.000000,325.000000,775.000000,375.000000,110.000000,"Combat BEGIN"};
 item25[] = {"Return",8,218,475.000000,75.000000,575.000000,125.000000,0.000000,"Return"};
-item26[] = {"Arty_Check",4,4314,1100.000000,250.000000,1200.000000,300.000000,84.000000,"Arty Check"};
+item26[] = {"Arty_Check",4,218,1100.000000,250.000000,1200.000000,300.000000,84.000000,"Arty Check"};
 item27[] = {"",7,210,1258.500000,21.000000,1266.500000,29.000000,0.000000,""};
 item28[] = {"Flank_Orders",4,218,1050.000000,225.000000,1150.000000,275.000000,105.000000,"Flank Orders"};
 item29[] = {"",7,210,296.000000,21.000000,304.000000,29.000000,0.000000,""};
@@ -150,8 +150,8 @@ link85[] = {56,57};
 link86[] = {57,58};
 link87[] = {58,59};
 link88[] = {59,27};
-globals[] = {0.000000,0,0,0,0,640,480,2,646,6316128,1,529.631836,1361.054688,636.694153,-48.280582,1073,884,1};
-window[] = {2,-1,-1,-1,-1,1155,130,1948,130,3,1091};
+globals[] = {0.000000,0,0,0,0,640,480,2,646,6316128,1,-574.274109,428.699554,929.127014,102.818733,1073,884,1};
+window[] = {2,-1,-1,-32000,-32000,1207,182,2000,182,3,1091};
 *//*%FSM</HEAD>*/
 class FSM
 {
@@ -214,8 +214,7 @@ class FSM
                                          "private _CNOW = false;" \n
                                          "private _ArtyGroupBool = _Group call VCM_fnc_ArtyManage;" \n
                                          "private _LocKnown = 0;" \n
-                                         "" \n
-                                         "if (VCM_SKILLCHANGE && !(_Group getVariable [""VCM_SkillDisable"", false])) then {_Group call VCM_AIDIFSET};" \n
+                                         "if (VCM_SKILLCHANGE && (_Group getVariable [""VCM_SkillDisable"", true])) then {_Group call VCM_AIDIFSET};" \n
                                          "" \n
                                          "" \n
                                          "{" \n
@@ -534,7 +533,6 @@ class FSM
                          "" \n
                          "private _index = currentWaypoint _Group;" \n
                          "private _WaypointIs = waypointType [_Group,_index];" \n
-                         "" \n
                          "if (!(_WaypointIs isEqualTo ""HOLD"")) then" \n
                          "{" \n
                          "	_VCOM_GARRISONED = false;" \n
@@ -565,6 +563,7 @@ class FSM
                                         precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
                                         condition=/*%FSM<CONDITION""">*/"((behaviour _leader) isEqualTo ""COMBAT"") && {!(_Beh isEqualTo ""COMBAT"")} && {!(_VCOM_GARRISONED)}"/*%FSM</CONDITION""">*/;
                                         action=/*%FSM<ACTION""">*/"//[_Leader,50] call VCM_fnc_FindCover;" \n
+                                         "if (VCM_Debug) then {systemChat (str _leader  + "" combat BEGIN."")};" \n
                                          "_Cover2Cover = time;" \n
                                          "_Beh = ""COMBAT"";" \n
                                          "if (VCM_FullSpeed) then {_Group setSpeedMode ""FULL"";};"/*%FSM</ACTION""">*/;
@@ -578,7 +577,8 @@ class FSM
                                         to="Checks";
                                         precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
                                         condition=/*%FSM<CONDITION""">*/"((behaviour _leader) isEqualTo ""COMBAT"") && {!(_VCOM_GARRISONED)}"/*%FSM</CONDITION""">*/;
-                                        action=/*%FSM<ACTION""">*/"_CNOW = true;"/*%FSM</ACTION""">*/;
+                                        action=/*%FSM<ACTION""">*/"_CNOW = true;" \n
+                                         "if (VCM_Debug) then {systemChat (str _leader  + "" combat."")};"/*%FSM</ACTION""">*/;
                                 };
                                 /*%FSM</LINK>*/
                                 /*%FSM<LINK "Combat_END">*/
@@ -652,7 +652,8 @@ class FSM
                 {
                         name = "Inf_Combat_Brain";
                         itemno = 23;
-                        init = /*%FSM<STATEINIT""">*/"private _t = time;" \n
+                        init = /*%FSM<STATEINIT""">*/"if (VCM_Debug) then {systemChat (str _leader  + "" In Combat Brain."")};" \n
+                         "private _t = time;" \n
                          "_Wait = 5;" \n
                          "" \n
                          "private _NearestEnemy = _leader call VCM_fnc_ClstEmy;	" \n
@@ -675,7 +676,7 @@ class FSM
                          "if (_LocAccuracy < 100) then" \n
                          "{		" \n
                          "		if (_TimeSS + 300 < time) then {_LocKnown = 0};" \n
-                         "		if (_LocKnown < 100) then" \n
+                         "					if (_LocKnown < 100) then" \n
                          "		{	" \n
                          "			(group _NearestEnemy) setVariable [""VCM_LOCKNWN"",[(_LocKnown + 1),time]];" \n
                          "		};	" \n
